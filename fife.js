@@ -1,8 +1,8 @@
 /*
 
-
-
-
+The Free Interactive Fiction Engine (fife)
+Written by Kendall Purser
+2015.05.29
 
 */
 
