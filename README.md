@@ -15,6 +15,6 @@ To register your story simply type the following in the `<script>` section of in
 
 ` fife.register.push("your_story");`
 
-This needs to be the same name as your file and the JSON object inside it. For example, I am writing an IF story called "Last Flight of the Pelican" so I would name my file pelican.js, and inside my JSON object would be named "pelican" as well like so: 
+This needs to be the same name as your file and the JSON object inside it. For example, I am writing an IF story called "Last Flight of the Pelican" so I would name my file "pelican.js," and inside my JSON object would be named "pelican" as well like so: 
 
 `var pelican = {}`
