@@ -62,31 +62,54 @@ var pelican = {
 	}],
 	items : {
 		"screwdriver" : {
-
+			look : "",
+			examine : "",
+			location : 0
 		},
 		"meteorite" : {
-
+			look : "",
+			examine : "",
+			location : ""
 		},
 		"grate" : {
-
+			look : "",
+			examine : "",
+			location : ""
 		},
 		"control panel" : {
-
+			look : "",
+			examine : "",
+			location : ""
 		},
 		"lever" {
-
+			look : "",
+			examine : "",
+			location : "",
+			position : "down"
 		},
 		"monitor" {
-
+			look : "",
+			examine : "",
+			location : ""
 		},
 		"screen" {
-
+			look : "",
+			examine : "",
+			location : ""
 		}
 	},
 	npcs : {
 
 	},
 	puzzles : {
-
+		power : [
+			1,
+			"pelican.items.lever.position === up",
+			"A mechanical hum reverberates through the ship. Through the window you see the solar panel array deploy and you hear the ship's systems come back on line as power floods back into the ship."
+		],
+		meteorite : [1, "pelican.items.meteorite.position !==", ],
+		escape [1, ],
+		grate [1,],
+		communication [1,]
 	}
 }
