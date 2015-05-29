@@ -20,13 +20,17 @@ var fife = {
 			var temp = "Please select a game:";
 
 			for (i =0; i < fife.register.length(); i +=1) {
-				tmp += i + "- " + fife.register.
+				tmp += i + "- " + fife.register[i]
 			}
 		}
 
 	},
-	load_game : function () {
-
+	load_game : function (game) {
+		// load given game into fife.data
+		fife.data = game;
 	},
+	parse_input : function () {
+		// main engine
+	}
 
 }
