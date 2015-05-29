@@ -5,3 +5,12 @@ Purpose/Goal
 ---
 To make interactive fiction easier to write and more accessible on the web. This is done by creating a user interface that is mobile friendly and utilizes JavaScript as the language of the interpreter. Stories can then be written in JSON format using a predefined structure that the interpreter understands. The end result will be introducing interactive fiction to a new generation that uses mobile devices as their primary form of entertainment.
 
+How to use fife
+---
+You will need three files to use fife. 1- index.html is the UI and includes the styles as well. This is where you will need to register your story file so that fife can find it and play it. 2- fife.js this is the core engine for the system and handles the basic functions of movement and other interpreter specifics. 3- your story file! You will need to write a JSON object inside a file named the same as the object so that fife can find it.
+
+Registering your story with fife
+---
+To register your story simply type the following in the `<script>` section of index.html
+
+` fife.register.push("your_story");`
