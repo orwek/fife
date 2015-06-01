@@ -32,7 +32,7 @@ var pelican = {
 		name : "Engineering",
 		look : "The nerve center of the SS Pelican.",
 		examine : "",
-		exits : [2,-1,-1,-1,8,-1]
+		exits : [-1,-1,-1,-1,8,-1]
 	},{
 		name : "Crew Quarters",
 		look : "Vertical bunks line the walls of this small chamber.",
@@ -109,7 +109,12 @@ var pelican = {
 			"pelican.items.lever.position",
 			"===",
 			"up",
-			"A mechanical hum reverberates through the ship. Through the window you see the solar panel array deploy and you hear the ship's systems come back on line as power floods back into the ship."
+			function () {
+				fife.write("A mechanical hum reverberates through the ship. Through the window you see the solar panel array deploy and you hear the ship's systems come back on line as power floods back into the ship.");
+				pelican.rooms[1].exits[2] = 2;
+				pelican.rooms[3].exits[0] = 2;
+				fife.score += pelican.puzzles.power[0];
+			}
 		],
 		meteorite : [1, "pelican.items.meteorite.location", "!==", 6, pelican.rooms[6].long = "A 12 foot wide hole in the floor is all that remains of the meteorite that started this whole mess." ],
 		escape [1, ],
