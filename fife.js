@@ -7,6 +7,7 @@ Written by Kendall Purser
 */
 
 var fife = {
+	input : "",
 	register : [],
 	data : {},
 	player : {
@@ -47,6 +48,9 @@ var fife = {
 	synonyms : {
 		get : ["take"],
 		i : ["inventory"],
+		n : ["north"],
+		e : ["east"],
+
 
 	}
 	commands : {
