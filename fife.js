@@ -97,6 +97,9 @@ var fife = {
 		get : function () {
 
 		},
+		restart : function () {
+			location.reload();
+		}
 
 	}
 
