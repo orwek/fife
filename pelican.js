@@ -11,7 +11,11 @@ var pelican = {
 		title : "Last Flight of the Pelican",
 		author : "Kendall Purser"
 		start_room : 0,
-		intro_text : "You watch the last spaceworthy life pod eject from the SS Pelican. At first it is a large fireball, then it rotates and turns slowly assuming its desired course toward Earth. Soon it is nothing more than a speck, and you are forced to return to the dull metal shell of an environment around you. The other life pods are damaged and all around you red lights flash and an alarm is blaring in your ears. <br /><br />You, Captain Reeves, are now alone on the SS Pelican."
+		intro_text : ["You watch the last spaceworthy life pod eject from the SS Pelican. At first it is a large fireball, then it rotates and turns slowly assuming its desired course toward Earth. Soon it is nothing more than a speck, and you are forced to return to the dull metal shell of an environment around you. The other life pods are damaged and all around you red lights flash and an alarm is blaring in your ears. <br /><br />You, Captain Reeves, are now alone on the SS Pelican."],
+		not_understand : "I don't understand.",
+		not_see : "I don't see {{item}} here.",
+		pointless : "No time for that captain!",
+		ignore_words : ["the","a","in","with","at"]
 	},
 	rooms : [{
 		name : "Pod bay",
@@ -23,11 +27,11 @@ var pelican = {
 		exits : [-1,-1,-1,0,-1,-1]
 	},{
 		name : "Corridor",
-		look : "This narrow corridor is the main passageway connecting each chamber of the ship.",
+		look : "This wide corridor is the main passageway connecting each chamber of the ship.",
 		exits : [1,-1,3,-1,-1,-1,-1,7,5,4]
 	},{
 		name : "Engineering",
-		look : "The nerve center of the SS Pelican.",
+		look : "The nerve center of the SS Pelican. A mess of wires resembling a ball of spaghetti flow in and out of various panels. There is also a row of levers, and a monitor along one wall.",
 		exits : [-1,-1,-1,-1,8,-1]
 	},{
 		name : "Crew Quarters",
@@ -43,11 +47,11 @@ var pelican = {
 		exits : [-1,-1,-1,-1,-1,-1]
 	},{
 		name : "Bay2",
-		look : "",
+		look : "This bay is packed with crates of elaborate artifacts and merchandise which would have fetched a handsome price on Earth. Fairly useless now though.",
 		exits : [-1,-1,-1,2,-1,-1]
 	},{
 		name : "Maintenance Shaft",
-		look : "This cramped shaft is just large enough to be uncomfortable.",
+		look : "This cramped shaft is just large enough to be uncomfortable. Cables and pipes line each side of the shaft leading down into each of the bays below.",
 		exits : [1,-1,3,-1,-1,-1]
 	}],
 	items : {
@@ -64,7 +68,7 @@ var pelican = {
 		"grate" : {
 			look : "Stretched steel grate that covers some kind of vent or maintenance shaft. It is held in place by several screws around the edge of the frame.",
 			location : 1,
-			move : "yes"
+			move : "no"
 		},
 		"control panel" : {
 			look : "There are various buttons and dials mounted on this control panel which operate the various navigation and communication systems on the SS Pelican. One particularly large dial grabs your attention.",
@@ -76,17 +80,37 @@ var pelican = {
 			position : "down"
 		},
 		"monitor" {
-			look : "This monitor is connected to the interstellar radio transmitter.",
+			look : "This monitor is connected to the interstellar radio transmitter. It currently reads 140.00 MHz.",
 			location : 1
 		},
-		"screen" {
+		"dial" {
+			location : 1,
+			look : "This dial controls the frequency of the SS Pelican's comlink.",
+			turn : "You rotate the dial at random, but all you get is static.",
+			rotate : pelican.items.dial.turn, // synonym
+			146.88 : function () {
+				fife.score += 1
+			},
+			parent : "control panel"
+		},
+		"switch" : {
+			location : 1,
+			look : "A small red switch marked- Alarm",
+			position : "on",
+			parent : "control panel"
+		},
+		"screen" : {
 			look : "This screen is covered in static and post-it notes.",
 			location : 3
 		},
-		"post-it" {
+		"post-it" : {
 			look : "Among the technical gibberish you read: Earth transmitting frequency- 146.88 MHz.",
 			location : 3,
 			parent : "screen"
+		},
+		"book" : {
+			look : "Among the technical gibberish you read: Earth transmitting frequency- 146.88 MHz.",
+			location : 3,
 		}
 	},
 	npcs : {
@@ -109,6 +133,7 @@ var pelican = {
 		meteorite : [1, "pelican.items.meteorite.location", "!==", 6, pelican.rooms[6].long = "A 12 foot wide hole in the floor is all that remains of the meteorite that started this whole mess." ],
 		escape [1, ],
 		grate [1,],
-		communication [1,]
+		communication [1,],
+		alarm [1,pelican.items.lever.position]
 	}
 }
