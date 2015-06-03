@@ -15,7 +15,7 @@ var pelican = {
 		not_understand : "I don't understand.",
 		not_see : "I don't see {{item}} here.",
 		pointless : "No time for that captain!",
-		ignore_words : ["the","a","in","with","at"]
+		ignore_words : ["the","a","in","with","at"],
 	},
 	rooms : [{
 		name : "Pod bay",
