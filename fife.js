@@ -12,14 +12,18 @@ var fife = {
 	data : {},
 	player : {
 		location : 0,
+		score : 0,
+
 	}
 	ignore_words : ["the","a","in","with","at","go"],
 	init : function () {
+		fife.write("fife v1.0 <br /> Written by Kendall Purser <br /> 2015-06-05")
 		if (fife.register.length === 0) {
 			fife.write("No games registered. To register your game use fife.register.push(\"your_game\")");
 		}
 		if (fife.register.length === 1) {
-			fife.write("No games registered. To register your game use fife.register.push(\"your_game\")");
+			fife.write("Loading...");
+			fife.load_game(fife.register[0]);
 		}
 		if (fife.register.length > 1) {
 			var temp = "Please select a game:";
@@ -46,10 +50,17 @@ var fife = {
 		fife.input = document.getElementById("cmd").value();
 	},
 	synonyms : {
-		get : ["take"],
-		i : ["inventory"],
+		get : ["take", "grab"],
+		i : ["inventory", "inv"],
 		n : ["north"],
-		e : ["east"]
+		e : ["east"],
+		s : ["south"],
+		w : ["west"],
+		ne : ["northeast", "north east"],
+		se : ["southeast", "south east"],
+		sw : ["southwest", "south west"],
+		nw : ["northwest", "north west"],
+		look : ["examine", "x"]
 	}
 	commands : {
 		// movement
@@ -148,6 +159,13 @@ var fife = {
 				fife.data.items[item].location = "i"
 			} else {
 				fife.write("Can't take " + item);
+			}
+		},
+		drop : function (item) {
+			if (fife.data.items[item].location == "i") {
+				fife.data.items[item].location = fife.player.location;
+			} else {
+				fife.write("Don't have " + item);
 			}
 		},
 		restart : function () {
