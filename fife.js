@@ -32,7 +32,6 @@ var fife = {
 				tmp += i + "- " + fife.register[i]
 			}
 		}
-
 	},
 	load_game : function (game) {
 		// load given game into fife.data
