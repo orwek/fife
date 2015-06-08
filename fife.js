@@ -23,16 +23,20 @@ var fife = {
 		cmd.onkeyup = function () {
 			if (event.keyCode === 13) {
 				fife.input = cmd.value;
+				fife.write("<br /><span style='color:green;'>" + fife.input + "</span>");
+				cmd.value = "";
+				cmd.focus();
+				fife.parse_input();
 			}
 		}
 
 		// fife setup, select a game if need be
-		fife.write("fife v1.0 <br /> Written by Kendall Purser <br /> 2015-06-05")
+		fife.write("<span style='color:green;'>fife v1.0 Written by Kendall Purser 2015-06-08</style>");
 		if (fife.register.length === 0) {
 			fife.write("No games registered. To register your game use fife.register.push(\"your_game\")");
 		}
 		if (fife.register.length === 1) {
-			fife.write("Loading...");
+			fife.write("<br />Loading...<br />");
 			fife.load_game(fife.register[0]);
 		}
 		if (fife.register.length > 1) {
@@ -44,17 +48,29 @@ var fife = {
 		}
 	},
 	load_game : function (game) {
-		// load given game into fife.data
+		// load given game into fife.data and start the game
 		fife.data = game;
+		fife.write("<hr /> <span style='font-weight: bold; color: #3695D5;'>" + fife.data.config.title + "</span>");
+		fife.write("By: " + fife.data.config.author);
+		fife.write(fife.data.config.date);
+		fife.write("<hr /><br />" + fife.data.config.intro_text);
+		fife.player.location = fife.data.config.start_room;
 	},
 	parse_input : function () {
 		// main engine
+		fife.write("Parser offline.");
+
+		// Verb, Noun, Object
+
 	},
 	write : function (x) {
 		// output to screen
-		var output = "";
-		output += document.getElementById("log").innerHTML;
-		output = output += x; 
+		var output = "",
+		log =document.getElementById("log");
+		output += log.innerHTML;
+		output = output += "<br />" + x ; 
+		log.innerHTML = output;
+		log.scrollTop = log.scrollHeight;
 	},
 	get : function () {
 		var cmd = document.getElementById("cmd");
@@ -185,5 +201,3 @@ var fife = {
 		}
 	}
 };
-
-fife.init();

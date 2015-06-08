@@ -10,6 +10,7 @@ var pelican = {
 	config : {
 		title : "Last Flight of the Pelican",
 		author : "Kendall Purser",
+		date : "2015-06-08",
 		start_room : 0,
 		intro_text : ["You watch the last spaceworthy life pod eject from the SS Pelican. At first it is a large fireball, then it rotates and turns slowly assuming its desired course toward Earth. Soon it is nothing more than a speck, and you are forced to return to the dull metal shell of an environment around you. The other life pods are damaged and all around you red lights flash and an alarm is blaring in your ears. <br /><br />You, Captain Reeves, are now alone on the SS Pelican."],
 		not_understand : "I don't understand.",
@@ -142,8 +143,10 @@ var pelican = {
 		escape : [1],
 		grate : [1],
 		communication : [1],
-		alarm : [1,pelican.items.lever.position]
+		alarm : [1,function () {
+			pelican.items.lever.position;
+		}]
 	}
 };
 
-fife.regiest.push("pelican");
+fife.register.push(pelican);
