@@ -13,10 +13,20 @@ var fife = {
 	player : {
 		location : 0,
 		score : 0,
-
-	}
+	},
 	ignore_words : ["the","a","in","with","at","go"],
 	init : function () {
+
+		// command prompt binding
+		var cmd = document.getElementById("cmd");
+		cmd.focus();
+		cmd.onkeyup = function () {
+			if (event.keyCode === 13) {
+				fife.input = cmd.value;
+			}
+		}
+
+		// fife setup, select a game if need be
 		fife.write("fife v1.0 <br /> Written by Kendall Purser <br /> 2015-06-05")
 		if (fife.register.length === 0) {
 			fife.write("No games registered. To register your game use fife.register.push(\"your_game\")");
@@ -42,11 +52,14 @@ var fife = {
 	},
 	write : function (x) {
 		// output to screen
-		var ouput = document.getElementById("log").innerHTML();
+		var output = "";
+		output += document.getElementById("log").innerHTML;
 		output = output += x; 
 	},
 	get : function () {
-		fife.input = document.getElementById("cmd").value();
+		var cmd = document.getElementById("cmd");
+		fife.input = cmd.value();
+		cmd.focus();
 	},
 	synonyms : {
 		get : ["take", "grab"],
@@ -60,7 +73,7 @@ var fife = {
 		sw : ["southwest", "south west"],
 		nw : ["northwest", "north west"],
 		look : ["examine", "x"]
-	}
+	},
 	commands : {
 		// movement
 		n : function () {
@@ -172,3 +185,5 @@ var fife = {
 		}
 	}
 };
+
+fife.init();

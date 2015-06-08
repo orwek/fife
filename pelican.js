@@ -9,13 +9,13 @@ Kendall Purser
 var pelican = {
 	config : {
 		title : "Last Flight of the Pelican",
-		author : "Kendall Purser"
+		author : "Kendall Purser",
 		start_room : 0,
 		intro_text : ["You watch the last spaceworthy life pod eject from the SS Pelican. At first it is a large fireball, then it rotates and turns slowly assuming its desired course toward Earth. Soon it is nothing more than a speck, and you are forced to return to the dull metal shell of an environment around you. The other life pods are damaged and all around you red lights flash and an alarm is blaring in your ears. <br /><br />You, Captain Reeves, are now alone on the SS Pelican."],
 		not_understand : "I don't understand.",
 		not_see : "I don't see {{item}} here.",
 		pointless : "No time for that captain!",
-		ignore_words : ["the","a","in","with","at"],
+		ignore_words : ["the","a","in","with","at"]
 	},
 	rooms : [{
 		name : "Pod bay",
@@ -74,22 +74,22 @@ var pelican = {
 			look : "There are various buttons and dials mounted on this control panel which operate the various navigation and communication systems on the SS Pelican. One particularly large dial grabs your attention.",
 			location : 1
 		},
-		"lever" {
+		"lever" : {
 			look : "One of many levers along the wall of the Engineering bay. This one has a blue handle and is marked \"Solar Array.\" It is currently in the down position.",
 			location : 3,
 			position : "down"
 		},
-		"monitor" {
+		"monitor" : {
 			look : "This monitor is connected to the interstellar radio transmitter. It currently reads 140.00 MHz.",
 			location : 1
 		},
-		"dial" {
+		"dial" : {
 			location : 1,
 			look : "This dial controls the frequency of the SS Pelican's comlink.",
 			turn : "You rotate the dial at random, but all you get is static.",
-			rotate : pelican.items.dial.turn, // synonym
+			//rotate : pelican.items.dial.turn, // synonym
 			146.88 : function () {
-				fife.score += 1
+				fife.score += 1;
 			},
 			parent : "control panel"
 		},
@@ -110,7 +110,7 @@ var pelican = {
 		},
 		"book" : {
 			look : "Among the technical gibberish you read: Earth transmitting frequency- 146.88 MHz.",
-			location : 3,
+			location : 3
 		}
 	},
 	npcs : {
@@ -127,13 +127,23 @@ var pelican = {
 				pelican.rooms[1].exits[2] = 2;
 				pelican.rooms[3].exits[0] = 2;
 				fife.score += pelican.puzzles.power[0];
-				fife.items.screen.look = "This screen is covered in post-it notes. It shows real-time stats of the SS Pelican including damage alerts. Bay1 is blinking red and reads: HULL BREACH. "
+				fife.items.screen.look = "This screen is covered in post-it notes. It shows real-time stats of the SS Pelican including damage alerts. Bay1 is blinking red and reads: HULL BREACH. ";
 			}
 		],
-		meteorite : [1, "pelican.items.meteorite.location", "!==", 6, pelican.rooms[6].long = "A 12 foot wide hole in the floor is all that remains of the meteorite that started this whole mess." ],
-		escape [1, ],
-		grate [1,],
-		communication [1,],
-		alarm [1,pelican.items.lever.position]
+		meteorite : [
+			1, 
+			"pelican.items.meteorite.location", 
+			"!==", 
+			6, 
+			function () {
+				pelican.rooms[6].look = "A 12 foot wide hole in the floor is all that remains of the meteorite that started this whole mess.";
+			}
+		],
+		escape : [1],
+		grate : [1],
+		communication : [1],
+		alarm : [1,pelican.items.lever.position]
 	}
-}
+};
+
+fife.regiest.push("pelican");
