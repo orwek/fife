@@ -19,7 +19,7 @@ var pelican = {
 		ignore_words : ["the","a","in","with","at"]
 	},
 	rooms : [{
-		name : "Pod bay",
+		name : "Pod Bay",
 		look : "Where the escape pods are accessed. The remaining life pods appear to be excessively damaged and would not survive the flight to Earth, let alone reentry.",
 		exits : [-1,1,-1,-1,-1,-1]
 	},{
