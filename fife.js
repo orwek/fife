@@ -68,35 +68,76 @@ var fife = {
 
 		// blank input
 		if (fife.input === "") {
-			fife.write("<span class='bold'>" + fife.data.rooms[fife.player.location].name + "</span>");
-			fife.write(fife.data.rooms[fife.player.location].look);
+			fife.commands.look();
 		}
 
-		// command check
+		// prep input (commands)
 		var tmp_input = fife.input;
 
 		tmp_input = tmp_input.split(" ");
-		for(i =0; i < tmp_input.length; i +=1) {
-			if (tmp_input[i] === " ") {
-				tmp_input.splice(i,1);
+		
+		for(i = 0; i < tmp_input.length; i +=1) {
+			if (tmp_input[i] === "") {
+				tmp_input.splice(i,1);				
+			}
+			for (j in fife.ignore_words) {
+				if (tmp_input[i] === fife.ignore_words[j]) {
+					tmp_input.splice(i,1);
+					i = 0;		
+				}
 			}
 		}
-		if (tmp_input.length === 1) {
-			fife.commands[tmp_input[0]];
-		}
+		console.log(tmp_input);
 
+		// check synonyms in commands or execute command
 
-		// room check
+		if (tmp_input.length === 1){
+			var tmp_found = 0;
+			if (fife.commands[tmp_input[0]] === undefined) {
+				for (i in fife.synonyms) {
+					for (j = 0; j < fife.synonyms[i].length; j += 1){
+						if (tmp_input[0] === fife.synonyms[i][j]) {
+							tmp_input[0] = i;
+							tmp_found = 1;
+						}
+					}
+				}
 
+				if (tmp_found === 0){
+					// if the command cannot be found in synonyms tell the user
+					fife.write(fife.data.config.not_understand);
+				} else {
+					// command was found in synonyms, run it
+					fife.commands[tmp_input[0]]();
+				}
 
-		// item check
-		for (i in fife.data.items) {
-			if (fife.input.indexOf(fife.data.items[i]) !== -1){
-				fife.noun = fife.data.items[i];
+			} else {
+				// if it is defined run it
+				fife.commands[tmp_input[0]]();
 			}
 		}
 
-		// npc check
+		if (tmp_input.length === 2) {
+			var valid_item = 0;
+
+			// valid item or npc
+			for (i in fife.data.items) {
+				if ( i.toLowerCase() === tmp_input[1].toLowerCase() ) {
+					valid_item = 1;
+				}
+			}
+			if (valid_item = 1) {
+				for (i in fife.data.items[tmp_input[1]]) {
+					if (fife.data.items[tmp_input[1][i]] === tmp_input[0]) {
+						fife.write(fife.data.items[tmp_input[1]][tmp_input[0]]);
+					}
+				}
+			} else {
+				fife.write(fife.data.config.not_understand);
+			}
+		}
+		
+		// npc check:  tell/ask X about Y, talk to X, etc...
 
 	},
 	write : function (x) {
@@ -109,9 +150,20 @@ var fife = {
 		log.scrollTop = log.scrollHeight;
 	},
 	get : function () {
+		// get input from ui
 		var cmd = document.getElementById("cmd");
 		fife.input = cmd.value();
 		cmd.focus();
+	},
+	move : function (x) {
+		// controls all movement in the game
+		var room = fife.data.rooms[fife.player.location];
+		if (room.exits.length >= (x+1) && room.exits[x] !== -1 && room.exits[x] !== undefined) {
+			fife.player.location = room.exits[x];
+			fife.commands.look();
+		} else {
+			fife.write(fife.data.config.not_move);
+		}
 	},
 	synonyms : {
 		get : ["take", "grab"],
@@ -120,6 +172,8 @@ var fife = {
 		e : ["east"],
 		s : ["south"],
 		w : ["west"],
+		u : ["up"],
+		d : ["down"],
 		ne : ["northeast", "north east"],
 		se : ["southeast", "south east"],
 		sw : ["southwest", "south west"],
@@ -129,88 +183,49 @@ var fife = {
 	commands : {
 		// movement
 		n : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 1) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[0];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(0);
 		},
 		e : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 2) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[1];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(1);
 		},
 		s : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 3) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[2];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(2);
 		},
 		w : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 4) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[3];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(3);
 		},
-		up : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 5) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[4];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+		u : function () {
+			fife.move(4);
 		},
-		down : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 6) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[5];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+		d : function () {
+			fife.move(5);
 		},
 		ne : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 7) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[6];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(6);
 		},
 		se : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 8) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[7];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(7);
 		},
 		sw : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 9) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[8];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(8);
 		},
 		nw : function () {
-			if (fife.data.rooms[fife.player.location].exits.length >= 10) {
-				fife.player.location = fife.data.rooms[fife.player.location].exits[9];
-				fife.write(fife.data.rooms[fife.player.locaiton].look);
-			} else {
-				fife.write("Can't go that way.");
-			}
+			fife.move(9);
 		},
 		//
 		look : function () {
+			var tmp_items = [];
+
+			fife.write("<span class='bold'>" + fife.data.rooms[fife.player.location].name + "</span>");
 			fife.write(fife.data.rooms[fife.player.location].look);
+			for (i in fife.data.items){
+				if (fife.data.items[i].location === fife.player.location && fife.data.items[i].parent === undefined) {
+					tmp_items.push(i);
+				}
+			}
+			if (tmp_items.length !== 0) {
+				fife.write("<br />You also see: " + tmp_items.join(","));
+			}
 		},
 		i : function () {
 			var tmp_items = [];
@@ -246,41 +261,41 @@ var fife = {
 			location.reload();
 		},
 		exits : function () {
-			var room = fife.data.rooms[fife.player.location].
-			exits = [];
-			for (i = 0; i < room.exits; i += 1) {
+			var room = fife.data.rooms[fife.player.location],
+			tmp_exits = [];
+			for (i = 0; i < room.exits.length; i += 1) {
 				if (i === 0 && room.exits[i] !== -1) {
-					exits.push("north");
+					tmp_exits.push("north");
 				}
 				if (i === 1 && room.exits[i] !== -1) {
-					exits.push("east");
+					tmp_exits.push("east");
 				}
 				if (i === 2 && room.exits[i] !== -1) {
-					exits.push("south");
+					tmp_exits.push("south");
 				}
 				if (i === 3 && room.exits[i] !== -1) {
-					exits.push("west");
+					tmp_exits.push("west");
 				}
 				if (i === 4 && room.exits[i] !== -1) {
-					exits.push("up");
+					tmp_exits.push("up");
 				}
 				if (i === 5 && room.exits[i] !== -1) {
-					exits.push("down");
+					tmp_exits.push("down");
 				}
 				if (i === 6 && room.exits[i] !== -1) {
-					exits.push("northeast");
+					tmp_exits.push("northeast");
 				}
 				if (i === 7 && room.exits[i] !== -1) {
-					exits.push("southeast");
+					tmp_exits.push("southeast");
 				}
 				if (i === 8 && room.exits[i] !== -1) {
-					exits.push("southwest");
+					tmp_exits.push("southwest");
 				}
 				if (i === 9 && room.exits[i] !== -1) {
-					exits.push("northwest");
+					tmp_exits.push("northwest");
 				}
 			}
-			fife.write(exits.join(","));
+			fife.write(tmp_exits.join(","));
 		}
 	}
 };

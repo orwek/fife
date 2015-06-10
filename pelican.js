@@ -13,8 +13,10 @@ var pelican = {
 		date : "2015-06-08",
 		start_room : 0,
 		intro_text : ["You watch the last spaceworthy life pod eject from the SS Pelican. At first it is a large fireball, then it rotates and turns slowly assuming its desired course toward Earth. Soon it is nothing more than a speck, and you are forced to return to the dull metal shell of an environment around you. The other life pods are damaged and all around you red lights flash and an alarm is blaring in your ears. <br /><br />You, Captain Reeves, are now alone on the SS Pelican."],
+		not_move : "THUMP! You run into a metal wall and take a moment to regain your bearings.",
 		not_understand : "I don't understand.",
-		not_see : "I don't see {{item}} here.",
+		not_see : "Hm... where was that?",
+		no_info : "You see nothing of interest",
 		pointless : "No time for that captain!",
 		ignore_words : ["the","a","in","with","at"]
 	},
@@ -73,7 +75,8 @@ var pelican = {
 		},
 		"control panel" : {
 			look : "There are various buttons and dials mounted on this control panel which operate the various navigation and communication systems on the SS Pelican. One particularly large dial grabs your attention.",
-			location : 1
+			location : 1,
+			synonyms : ["panel"]
 		},
 		"lever" : {
 			look : "One of many levers along the wall of the Engineering bay. This one has a blue handle and is marked \"Solar Array.\" It is currently in the down position.",
@@ -107,7 +110,8 @@ var pelican = {
 		"post-it" : {
 			look : "Among the technical gibberish you read: Earth transmitting frequency- 146.88 MHz.",
 			location : 3,
-			parent : "screen"
+			parent : "screen",
+			synonyms : ["note"]
 		},
 		"book" : {
 			look : "Among the technical gibberish you read: Earth transmitting frequency- 146.88 MHz.",
