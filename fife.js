@@ -9,8 +9,8 @@ Written by Kendall Purser
 var fife = {
 	input : "",
 
-	noun : "",
 	verb : "",
+	noun : "",
 	object : "",
 
 	register : [],
@@ -18,6 +18,7 @@ var fife = {
 	player : {
 		location : 0,
 		score : 0,
+		time : 0
 	},
 	ignore_words : ["the","a","in","with","at","go"],
 	init : function () {
@@ -66,6 +67,8 @@ var fife = {
 		// main engine
 		//fife.write("Parser offline.");
 
+		// parse into noun, verb, object
+
 		// blank input
 		if (fife.input === "") {
 			fife.commands.look();
@@ -73,6 +76,9 @@ var fife = {
 
 		// prep input (commands)
 		var tmp_input = fife.input;
+		fife.verb = "";
+		fife.noun = "";
+		fife.object = "";
 
 		tmp_input = tmp_input.split(" ");
 		
@@ -108,7 +114,8 @@ var fife = {
 					fife.write(fife.data.config.not_understand);
 				} else {
 					// command was found in synonyms, run it
-					fife.commands[tmp_input[0]]();
+					fife.verb = tmp_input[0];
+					
 				}
 
 			} else {
@@ -124,21 +131,55 @@ var fife = {
 			for (i in fife.data.items) {
 				if ( i.toLowerCase() === tmp_input[1].toLowerCase() ) {
 					valid_item = 1;
+					fife.noun = tmp_input[1].toLowerCase();
+					fife.verb = tmp_input[0].toLowerCase();
 				}
 			}
+
 			if (valid_item = 1) {
 				for (i in fife.data.items[tmp_input[1]]) {
 					if (fife.data.items[tmp_input[1][i]] === tmp_input[0]) {
 						fife.write(fife.data.items[tmp_input[1]][tmp_input[0]]);
 					}
 				}
+			} else if (fife.commands[fife.verb] !== undefined) {
+				fife.commands[fife.verb] (fife.noun);
 			} else {
 				fife.write(fife.data.config.not_understand);
 			}
 		}
 		
-		// npc check:  tell/ask X about Y, talk to X, etc...
+		// npc check:  tell/ask X about Y, talk to X, etc... save for v2.0
 
+
+
+		// *** execute command ***
+		var tmp_test = 0;
+		if (fife.verb !== "" && fife.noun === "" && fife.object === "") {
+			fife.commands[fife.verb]();
+		}
+
+		if (fife.verb !== "" && fife.noun !== "" && fife.object === "") {
+			
+			if (fife.data[fife.noun][fife.verb] !== undefined) {
+				fife.write(fife.data[fife.noun][fife.verb]);
+				tmp_test +=1;
+			}
+
+			if (fife.commands[five.verb] !== undefined) {
+				fife.commands[fife.verb] (fife.noun);
+				tmp_test +=1;
+			}					
+		}
+
+		if (fife.verb !== "" && fife.noun !== "" && fife.object !== "") {
+
+		}
+
+		// *** command not understood ***
+		if (tmp_test !== 0) {
+				fife.write(fife.data.config.not_understand);
+			}
 	},
 	write : function (x) {
 		// output to screen
@@ -235,7 +276,7 @@ var fife = {
 				}
 			}
 			tmp_items = tmp_items.join(",");
-			fife.write(tmp_items);
+			fife.write("You are carrying: " + tmp_items);
 		},
 		score : function () {
 			fife.write(fife.player.score);
@@ -244,14 +285,15 @@ var fife = {
 			fife.write(fife.player.time);
 		},
 		get : function (item) {
-			if (fife.data.items[item].take == "yes") {
-				fife.data.items[item].location = "i"
+			if (fife.data.items[item].take === "yes" && fife.data.items[item].location === fife.player.location) {
+				fife.data.items[item].location = "i";
+				fife.write("Taken.");
 			} else {
 				fife.write("Can't take " + item);
 			}
 		},
 		drop : function (item) {
-			if (fife.data.items[item].location == "i") {
+			if (fife.data.items[item].location === "i") {
 				fife.data.items[item].location = fife.player.location;
 			} else {
 				fife.write("Don't have " + item);

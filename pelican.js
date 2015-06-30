@@ -59,7 +59,7 @@ var pelican = {
 	}],
 	items : {
 		"screwdriver" : {
-			look : "Your typical Phillips screwdriver. Useful for assembling and disassembling, or your average household... er... spaceship repairs.",
+			look : "Your typical Phillips screwdriver. Useful for assembling and disassembling, as well as your average household... er... spaceship repairs.",
 			location : 0,
 			move : "no",
 			take : "yes"
