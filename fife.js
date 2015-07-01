@@ -152,7 +152,6 @@ var fife = {
 		if (fife.verb !== "" && fife.noun === "" && fife.object === "") {
 			if (fife.noun !== "") {
 				fife.commands[fife.verb]();
-				console.log ("huh?");
 				tmp_test +=1;
 			}
 		}
@@ -178,8 +177,8 @@ var fife = {
 
 		// *** command not understood ***
 		if (tmp_test === 0) {
-				fife.write(fife.data.config.not_understand);
-			}
+			fife.write(fife.data.config.not_understand);
+		}
 	},
 	write : function (x) {
 		// output to screen
