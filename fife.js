@@ -29,7 +29,7 @@ var fife = {
 		cmd.onkeyup = function () {
 			if (event.keyCode === 13) {
 				fife.input = cmd.value;
-				fife.write("<br /><span style='color:green;'>" + fife.input + "</span>");
+				fife.write("<br /><span style='color:green;'> > " + fife.input + "</span>");
 				cmd.value = "";
 				cmd.focus();
 				fife.parse_input();
@@ -69,12 +69,6 @@ var fife = {
 
 		// parse into noun, verb, object
 
-		// blank input
-		if (fife.input === "") {
-			fife.commands.look();
-		}
-
-		// prep input (commands)
 		var tmp_input = fife.input;
 		fife.verb = "";
 		fife.noun = "";
@@ -82,6 +76,7 @@ var fife = {
 
 		tmp_input = tmp_input.split(" ");
 		
+		// prep input, remove blank array elements and ignored words
 		for(i = 0; i < tmp_input.length; i +=1) {
 			if (tmp_input[i] === "") {
 				tmp_input.splice(i,1);				
@@ -127,7 +122,7 @@ var fife = {
 		if (tmp_input.length === 2) {
 			var valid_item = 0;
 
-			// valid item or npc
+			// valid item 
 			for (i in fife.data.items) {
 				if ( i.toLowerCase() === tmp_input[1].toLowerCase() ) {
 					valid_item = 1;
@@ -135,17 +130,8 @@ var fife = {
 					fife.verb = tmp_input[0].toLowerCase();
 				}
 			}
-
-			if (valid_item = 1) {
-				for (i in fife.data.items[tmp_input[1]]) {
-					if (fife.data.items[tmp_input[1][i]] === tmp_input[0]) {
-						fife.write(fife.data.items[tmp_input[1]][tmp_input[0]]);
-					}
-				}
-			} else if (fife.commands[fife.verb] !== undefined) {
-				fife.commands[fife.verb] (fife.noun);
-			} else {
-				fife.write(fife.data.config.not_understand);
+			if (valid_item === 0) {
+				fife.noun = "";
 			}
 		}
 		
@@ -155,29 +141,43 @@ var fife = {
 
 		// *** execute command ***
 		var tmp_test = 0;
-		if (fife.verb !== "" && fife.noun === "" && fife.object === "") {
-			fife.commands[fife.verb]();
+
+		// blank input
+		if (fife.verb === "" && fife.noun === "" && fife.object === "") {
+			fife.commands.look();
+			tmp_test +=1;
 		}
 
+		// Verb only
+		if (fife.verb !== "" && fife.noun === "" && fife.object === "") {
+			if (fife.noun !== "") {
+				fife.commands[fife.verb]();
+				console.log ("huh?");
+				tmp_test +=1;
+			}
+		}
+
+		// verb and noun
 		if (fife.verb !== "" && fife.noun !== "" && fife.object === "") {
 			
-			if (fife.data[fife.noun][fife.verb] !== undefined) {
-				fife.write(fife.data[fife.noun][fife.verb]);
+			if (fife.data.items[fife.noun][fife.verb] !== undefined) {
+				fife.write(fife.data.items[fife.noun][fife.verb]);
 				tmp_test +=1;
 			}
 
-			if (fife.commands[five.verb] !== undefined) {
+			if (fife.commands[fife.verb] !== undefined && tmp_test === 0) {
 				fife.commands[fife.verb] (fife.noun);
 				tmp_test +=1;
 			}					
 		}
 
+		// verb, noun, and object
 		if (fife.verb !== "" && fife.noun !== "" && fife.object !== "") {
 
 		}
 
 		// *** command not understood ***
-		if (tmp_test !== 0) {
+		if (tmp_test === 0) {
 				fife.write(fife.data.config.not_understand);
 			}
 	},
