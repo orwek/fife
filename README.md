@@ -7,7 +7,10 @@ To make interactive fiction more accessible on the web. This is done by creating
 
 How to use fife
 ---
-You will need three files to use fife. 1- index.html is the UI and includes the styles as well. This is where you will need to register your story file so that fife can find it and play it. 2- fife.js this is the core engine for the system and handles the basic functions of movement and other interpreter specifics. 3- your story file! You will need to write a JSON object inside a file named the same as the object so that fife can find it.
+You will need three files to use fife. 
+1- index.html is the UI and includes the styles as well. This is where you will need to register your story file so that fife can find it and play it. 
+2- fife.js this is the core engine for the system and handles the basic functions of movement and other interpreter specifics. 
+3- your story file! You will need to write a JSON object inside a file named the same as the object so that fife can find it.
 
 Registering your story with fife
 ---
