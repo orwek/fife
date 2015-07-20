@@ -32,7 +32,7 @@ var fife = {
 				fife.write("<br /><span style='color:green;'> > " + fife.input + "</span>");
 				cmd.value = "";
 				cmd.focus();
-				fife.parse_input();
+				fife.bind();
 			}
 		}
 
@@ -63,13 +63,17 @@ var fife = {
 		fife.write("<br /> <span style='color:green;'>Press ENTER to continue</span>");
 		fife.player.location = fife.data.config.start_room;
 	},
-	parse_input : function () {
+	bind : function () {
 		// main engine
-		//fife.write("Parser offline.");
-
+		fife.parse_input();
+		fife.synonym_check();
+		fife.execute();
+	},
+	parse_input : function () {
 		// parse into noun, verb, object
-
 		var tmp_input = fife.input;
+
+		// clear variables
 		fife.verb = "";
 		fife.noun = "";
 		fife.object = "";
@@ -88,9 +92,16 @@ var fife = {
 				}
 			}
 		}
+
+		// adjective check
+		if (tmp_input.length > 3) {
+			
+		}
+	},
+	synonym_check : function () {
 		console.log(tmp_input);
 
-		// check synonyms in commands or execute command
+		// check synonyms
 
 		if (tmp_input.length === 1){
 			var tmp_found = 0;
@@ -110,12 +121,11 @@ var fife = {
 				} else {
 					// command was found in synonyms, run it
 					fife.verb = tmp_input[0];
-					
 				}
 
 			} else {
 				// if it is defined run it
-				fife.commands[tmp_input[0]]();
+				// fife.commands[tmp_input[0]]();
 			}
 		}
 
@@ -136,17 +146,20 @@ var fife = {
 		}
 		
 		// npc check:  tell/ask X about Y, talk to X, etc... save for v2.0
+		fife.execute();
 
-
-
+	},
+	execute : function () {
 		// *** execute command ***
 		var tmp_test = 0;
 
 		// blank input
+
 		if (fife.verb === "" && fife.noun === "" && fife.object === "") {
 			fife.commands.look();
 			tmp_test +=1;
 		}
+
 
 		// Verb only
 		if (fife.verb !== "" && fife.noun === "" && fife.object === "") {
@@ -167,7 +180,11 @@ var fife = {
 			if (fife.commands[fife.verb] !== undefined && tmp_test === 0) {
 				fife.commands[fife.verb] (fife.noun);
 				tmp_test +=1;
-			}					
+			}
+			if (fife.verb === "get") {
+				fife.commands.get(fife.noun);
+				tmp_text +=1;
+			}
 		}
 
 		// verb, noun, and object
@@ -264,7 +281,7 @@ var fife = {
 				}
 			}
 			if (tmp_items.length !== 0) {
-				fife.write("<br />You also see: " + tmp_items.join(","));
+				fife.write("<br />You also see: " + tmp_items.join(",") + "<br />");
 			}
 		},
 		i : function () {

@@ -2,8 +2,7 @@
 Last Flight of the Pelican
 
 Kendall Purser
-2-115.-15.29
-
+2015.06.01 - 2015.07.07
 */
 
 var pelican = {
